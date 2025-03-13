@@ -1,4 +1,4 @@
-<img src="/artwork/logo-files/dad-cdm-no-text.png" width="150">
+<img src="https://github.com/DAD-CDM/dad-cdm-admin/blob/main/artwork/logo-files/dad-cdm-no-text.png" width="150">
 
 # DAD-CDM OASIS Open Project Technical Steering Committee (TSC)
 

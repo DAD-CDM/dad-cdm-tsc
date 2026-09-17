@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Threat Actor & Intrusion Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --text: #212529;
+  --link: #0000FF;
+  --pink-bg: #F9F2F4;
+  --pink-fg: #C7254E;
+  --blue-bg: #CFE2F3;
+  --blue-fg: #073763;
+  --table-header-bg: #073763;
+  --border: #000000;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Poppins', 'Segoe UI', Calibri, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', 'Segoe UI', Calibri, Arial, sans-serif;
+  font-weight: 600;
+  color: var(--text);
+}
+h1 { font-size: 2.4rem; margin: 0 0 1.2rem; }
+h2 { font-size: 1.6rem; margin: 2.2rem 0 0.8rem; }
+h3 { font-size: 1.3rem; margin: 1.6rem 0 0.7rem; border-bottom: 1px solid #DEE2E6; padding-bottom: 0.3rem; }
+h4 { font-size: 1.1rem; margin: 1.4rem 0 0.6rem; }
+p { margin: 0 0 1rem; }
+ul, ol { margin: 0 0 1rem; padding-left: 1.6rem; }
+li { margin-bottom: 0.3rem; }
+a { color: var(--link); text-decoration: underline; }
+a:hover { opacity: 0.8; }
+hr { border: none; border-top: 1px solid #DEE2E6; margin: 2rem 0; }
+
+/* STIX object / vocabulary / enumeration names: red text on pink background */
+strong code {
+  font-weight: normal;
+  color: var(--pink-fg);
+  background-color: var(--pink-bg);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 90%;
+}
+a:has(> strong code) { text-decoration: none; }
+
+/* STIX relationship names: dark blue text on light blue background */
+em code {
+  font-style: normal;
+  color: var(--blue-fg);
+  background-color: var(--blue-bg);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 90%;
+}
+a:has(> em code) { text-decoration: none; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid var(--border);
+  margin: 1rem 0 1.5rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 6px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background-color: var(--table-header-bg);
+  color: white;
+}
+
+pre {
+  background-color: #F5F5F5;
+  border: 1px solid #DDDDDD;
+  padding: 10px;
+  line-height: 1.3;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 85%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: 4px;
+}
+pre code {
+  color: #000000;
+  background: none;
+  padding: 0;
+  font-size: 100%;
+}
+
+sup { font-size: 75%; }
+
+img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>Threat Actor &amp; Intrusion Set</h1>
+<p>Table of Contents</p>
+<ul>
+<li><a href="#_Toc232626897">Introduction</a></li>
+<li><a href="#_Toc232626898">Acknowledgements</a></li>
+<li><a href="#threat-actor">Threat Actor</a><ul>
+<li><a href="#properties">Properties</a></li>
+<li><a href="#_Toc232626901">Vocabularies</a></li>
+<li><a href="#relationships">Relationships</a></li>
+<li><a href="#example-1-overt-state-influence">Example 1: Overt State Influence</a></li>
+<li><a href="#example-2-harassment">Example 2: Harassment</a></li>
+<li><a href="#example-3-scam">Example 3: Scam</a></li>
+<li><a href="#example-4-misinformation">Example 4: Misinformation</a></li>
+</ul>
+</li>
+<li><a href="#intrusion-set">Intrusion Set</a><ul>
+<li><a href="#properties-1">Properties</a></li>
+<li><a href="#vocabularies-1">Vocabularies</a></li>
+<li><a href="#relationships-1">Relationships</a></li>
+<li><a href="#example-5-gender-based-violence">Example 5: Gender-Based Violence</a></li>
+</ul>
+</li>
+<li><a href="#integrated-hypothetical-example">Integrated Hypothetical Example</a><ul>
+<li><a href="#stix-bundle">STIX Bundle</a></li>
+<li><a href="#knowledge-graph">Knowledge Graph</a></li>
+</ul>
+</li>
+<li><a href="#integrated-real-world-example">Integrated Real-World Example</a><ul>
+<li><a href="#stix-bundle-1">STIX Bundle</a></li>
+<li><a href="#knowledge-graph-1">Knowledge Graph</a></li>
+</ul>
+</li>
+<li><a href="#vocabularies-2">Vocabularies</a><ul>
+<li><a href="#threat-actor-type-vocabulary">Threat Actor Type Vocabulary</a></li>
+<li><a href="#threat-actor-role-vocabulary">Threat Actor Role Vocabulary</a></li>
+<li><a href="#attack-motivation-vocabulary">Attack Motivation Vocabulary</a></li>
+</ul>
+</li>
+<li><a href="#enumerations">Enumerations</a><ul>
+<li><a href="#context-enumeration">Context Enumeration</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="_Toc232626897">Introduction</h2>
+<p>This document proposes extensions to STIX 2.1 to handle the threat actor and intrusion set STIX Domain Objects (SDOs) relevant to Foreign Information Manipulation and Interference (FIMI) and other types of online harm, such as hate speech, digital fraud, or information suppression. These extensions refer to properties, relationships, enumerations, and open vocabularies. The proposal adheres to the guidance laid out in section 7.3 of the STIX 2.1 specification<sup id="fnref-1"><a href="#fn-1">1</a></sup>. The following Large Language Models have been used to refine this proposal: Google Gemini 3 Flash, Perplexity Pro (which at the time of writing uses Perplexity Sonar, OpenAI GPT‑5.4, Claude Sonnet 4.6, Claude Opus 4.8, or Gemini 3.1 Pro, depending upon query), and Claude Opus 4.8.</p>
+<p>The current Threat Actor, Intrusion Set, and Identity SDOs and their relationships are depicted in the following figure.</p>
+<p align="center"><img src="media/c077982c2b36ce869083ef5125b39bf9.png" style="max-width: 100%;"></p>
+
+<p>Threat Actors are individuals, groups, or organizations believed to be operating with malicious intent. Threat actors are mental constructs in the minds of defenders. The real actor(s) behind a threat actor are modeled using the Identity SDO.</p>
+<p>An Intrusion Set is a grouped set of campaigns, adversarial behaviors and resources with common properties that is believed to be orchestrated by a single organization. An Intrusion Set can be thought of as the fingerprint of a Threat Actor whose real identity may be known or unknown.</p>
+<p>Recent publications by FIMI defenders refer to one type of “intrusion set” in the public information environment as an “information manipulation set.<sup id="fnref-2"><a href="#fn-2">2</a></sup>” This is defined “as a set of adversarial behaviors, tools, and tactics likely linked to the same threat actor. These sets bridge the gap between individual incidents and full campaign attribution, enabling analysis at three levels: tactical (incident-level data), operational (narratives and infrastructure), and strategic (linking to threat actors and intent).” Where intelligence exists and resources permit, we recommend that FIMI defenders move beyond tactical level reporting to model FIMI threats at the operational level using the Intrusion Set SDO, or at the strategic level using the Threat Actor SDO. As explained by the Doppelgänger Working Group, this approach will help the community move beyond less effective short-term responses towards stronger technical attribution, more systemic risk mitigation and more effective long-term threat disruption<sup id="fnref-3"><a href="#fn-3">3</a></sup>.</p>
+<h2 id="_Toc232626898">Acknowledgements</h2>
+<p>The DAD-CDM Technical Steering Committee would like to express its sincere gratitude to the EU External Action Service (EEAS), CheckFirst, Davide Gianni, Jeff Mates (US DoD Cyber Crime Center – DC3), Tim Casey (formerly Intel), and Adam M. (DISARM Foundation) for their guidance and feedback throughout the course of this research. Their expertise and insight greatly contributed to the development of this work to ensure that our findings align with the current practices of the STIX and FIMI communities.</p>
+<p>This document includes only the proposed <em>extensions</em> to STIX 2.1. To get the complete picture, readers are advised to read this document in conjunction with the STIX 2.1 specification<sup><a href="#fn-1">1</a></sup>. This document also assumes the existence of the Event, Task, and Impact SDOs which have been proposed by the Cyber Threat Intelligence Technical Committee of OASIS (the “CTI-TC”) for inclusion in STIX 2.2<sup id="fnref-4"><a href="#fn-4">4</a></sup>.</p>
+<p>New relationships being proposed include those already added by Filigran to OpenCTI<sup id="fnref-5"><a href="#fn-5">5</a></sup>. They assume not only the existence of the Event, Task, and Impact SDOs, but also the Channel, Narrative, and Persona SDOs and the Media Content SCO. These latter objects have been proposed by Filigran as DAD-CDM extensions<sup id="fnref-6"><a href="#fn-6">6</a></sup>. They will be the subject of separate DAD-CDM proposals.</p>
+<h2 id="threat-actor">Threat Actor</h2>
+<p>The original STIX 2.1 <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_tqbl8z36yoir"><strong><code>threat-actor-type-ov</code></strong></a> drew inspiration from Intel’s Threat Agent Library<sup id="fnref-7"><a href="#fn-7">7</a></sup>, selecting the threat agents which were of most relevance to the cyber community, with the goal of creating a simple and concise taxonomy. The DAD-CDM Technical Steering Committee (TSC) has taken the same approach. We expanded the Threat Agent Library into a comprehensive set of threat agents across four classes of hostile intent: intrusion (theft, sabotage – the cyber case), manipulation (disinformation, FIMI), abuse (hate speech, information suppression), and exploitation (fraud, sextortion). From this set of threat agents (for details see the supporting document <em>Expanding Intel’s Threat Agent Library to Accommodate FIMI and Other Online Harms</em>) we have selected the agents and motivations which are most relevant to and most easily understood by those defending the integrity of the public information environment, and we have simplified the descriptions of those for an international audience.</p>
+<p>Preference was given to recognizable entities which could be clearly identified by their repeated actions of a particular malicious type. Ad hoc or one-off malicious actions which do not rise to the level of an identifying characteristic remain as techniques modeled using the Attack Pattern SDO. The TSC preferred to avoid labels with emotionally loaded terms (“public propagandist” was replaced by “overt manipulator”), labels which are difficult to evidence (“misinformer”), and labels which are politically controversial (“passive bigot”).</p>
+<h3 id="properties">Properties</h3>
+<p>No new or amended properties are recommended.</p>
+<h3 id="_Toc232626901">Vocabularies</h3>
+<ul>
+<li>We recommend the following new entries to Threat Actor Type Vocabulary <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_tqbl8z36yoir"><strong><code>threat-actor-type-ov</code></strong></a>: Overt Manipulator, Covert Manipulator, Influence for Hire Provider, Cyber Mob, Cyber Bully, Fraudster, Cyber Stalker, Extortionist. See Threat Actor Type Vocabulary for details.</li>
+<li>We recommend the following new entries to Attack Motivation Vocabulary <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_dmb1khqsn650"><strong><code>attack-motivation-ov</code></strong></a>: “Belonging”, “Control”, “Superiority”, “Adulation”, “Outrage”, “Revenge”, “Spite”, “Hatred”. See Attack Motivation Vocabulary for details.</li>
+</ul>
+<h3 id="relationships">Relationships</h3>
+<p>The following additional relationships are recommended.</p>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Type</th>
+  <th>Target</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>sponsors</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a>, <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_pcpvfz4ik6d6"><strong><code>campaign</code></strong></a></td>
+  <td>The threat actor sponsors the specified threat actor or campaign.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>employs</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp"><strong><code>identity</code></strong></a></td>
+  <td>The threat actor employs the specified individual.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>compromises</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp"><strong><code>identity</code></strong></a></td>
+  <td>The threat actor compromises the specified individual, organization, or group.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>presents-as</code></em></td>
+  <td><strong><code>persona</code></strong></td>
+  <td>The threat actor presents as the specified persona.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>cooperates-with</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The threat actor cooperates with the specified threat actor.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>part-of</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The threat actor is part of the specified threat actor.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>participates-in</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_pcpvfz4ik6d6"><strong><code>campaign</code></strong></a></td>
+  <td>The threat actor participates in the specified campaign.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>targets</code></em></td>
+  <td><a href="https://oasis-open.github.io/cti-stix-common-objects/Incident_Extension_Suite.html#event"><strong><code>event</code></strong></a></td>
+  <td>The threat actor targets the specified event.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>owns, uses</code></em></td>
+  <td><strong><code>channel</code></strong></td>
+  <td>The threat actor owns or uses the specified channel.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>creates, spreads, uses, amplifies</code></em></td>
+  <td><strong><code>narrative</code></strong></td>
+  <td>The threat actor creates, spreads, uses, or amplifies the specified narrative.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td><em><code>creates, publishes, amplifies, engages-with</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_pcpvfz4ik6d6"><strong><code>media content</code></strong></a></td>
+  <td>The threat actor creates, publishes, amplifies, or engages with the specified media content.</td>
+</tr>
+</tbody>
+</table>
+<p>The following additional reverse relationships are proposed.</p>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Type</th>
+  <th>Target</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp"><strong><code>identity</code></strong></a></td>
+  <td><em><code>employed-by, compromised-by, contracts-with</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The specified individual, organization, or group is employed by, compromised by or enters into a contract with the threat actor.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_pcpvfz4ik6d6"><strong><code>campaign</code></strong></a></td>
+  <td><em><code>sponsored-by</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The specified campaign is sponsored by the threat actor.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_sczfhw64pjxt"><strong><code>incident</code></strong></a></td>
+  <td><em><code>attributed-to</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The specified incident is attributed to the threat actor.</td>
+</tr>
+<tr>
+  <td><strong><code>media content</code></strong></td>
+  <td><em><code>created-by, published-by, amplified-by</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw"><strong><code>threat actor</code></strong></a></td>
+  <td>The specified media content is created by, published by, or amplified by the threat actor.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-1-overt-state-influence">Example 1: Overt State Influence</h3>
+<p>The following example represents a state-linked threat actor who engages in overt influence in plain sight.</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;threat-actor&quot;,
+  &quot;spec_version&quot;: &quot;2.1&quot;,
+  &quot;id&quot;: &quot;threat-actor--22222222-1111-4111-8111-222222222222&quot;,
+  &quot;created_by_ref&quot;: &quot;identity--bbbbbbbb-cccc-4ddd-8eee-ffffffffffff&quot;,
+  &quot;created&quot;: &quot;2025-12-30T14:05:00.000Z&quot;,
+  &quot;modified&quot;: &quot;2025-12-30T14:05:00.000Z&quot;,
+  &quot;name&quot;: &quot;State Media Propaganda Unit&quot;,
+  &quot;description&quot;: &quot;A state-controlled media arm that openly pushes biased narratives and selective truths to support government objectives.&quot;,
+  &quot;threat_actor_types&quot;: [
+    &quot;overt-manipulator&quot;
+  ],
+  &quot;aliases&quot;: [
+    &quot;Patriotic Voice Network&quot;
+  ],
+  &quot;roles&quot;: [
+    &quot;communicator&quot;,
+    &quot;content-publisher&quot;
+  ],
+  &quot;goals&quot;: [
+    &quot;Shape international perception of state policies&quot;,
+    &quot;Discredit foreign critics and opposition figures&quot;
+  ],
+  &quot;sophistication&quot;: &quot;advanced&quot;,
+  &quot;resource_level&quot;: &quot;organization&quot;,
+  &quot;primary_motivation&quot;: &quot;ideology&quot;,
+  &quot;secondary_motivations&quot;: [
+    &quot;organizational-gain&quot;,
+    &quot;control&quot;
+  ]
+}
+</code></pre>
+<h3 id="example-2-harassment">Example 2: Harassment</h3>
+<p>The following example represents a loose online collective that targets journalists and activists with racist and misogynistic abuse.</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;threat-actor&quot;,
+  &quot;spec_version&quot;: &quot;2.1&quot;,
+  &quot;id&quot;: &quot;threat-actor--33333333-1111-4111-8111-333333333333&quot;,
+  &quot;created_by_ref&quot;: &quot;identity--cccccccc-dddd-4eee-8fff-000000000000&quot;,
+  &quot;created&quot;: &quot;2025-12-30T14:10:00.000Z&quot;,
+  &quot;modified&quot;: &quot;2025-12-30T14:10:00.000Z&quot;,
+  &quot;name&quot;: &quot;Coordinated Hate Harassment Crew&quot;,
+  &quot;description&quot;: &quot;A loose online collective that targets journalists and activists with racist and misogynistic abuse.&quot;,
+  &quot;threat_actor_types&quot;: [
+    &quot;cyber-mob&quot;
+  ],
+  &quot;aliases&quot;: [
+    &quot;CleanUpTheFeed&quot;,
+    &quot;RealTruthGuardians&quot;
+  ],
+  &quot;roles&quot;: [
+    &quot;content-publisher&quot;,
+    &quot;content-amplifier&quot;
+  ],
+  &quot;goals&quot;: [
+    &quot;Silence targeted journalists through harassment&quot;,
+    &quot;Intimidate activists and drive them offline&quot;
+  ],
+  &quot;sophistication&quot;: &quot;operational&quot;,
+  &quot;resource_level&quot;: &quot;team&quot;,
+  &quot;primary_motivation&quot;: &quot;dominance&quot;,
+  &quot;secondary_motivations&quot;: [
+    &quot;control&quot;,
+    &quot;hatred&quot;,
+    &quot;belonging&quot;
+  ]
+}
+</code></pre>
+<h3 id="example-3-scam">Example 3: Scam</h3>
+<p>The following example represents a criminal network that grooms victims via dating platforms and then conducts large-scale investment and sextortion scams.</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;threat-actor&quot;,
+  &quot;spec_version&quot;: &quot;2.1&quot;,
+  &quot;id&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+  &quot;created_by_ref&quot;: &quot;identity--dddddddd-eeee-4fff-8aaa-111111111111&quot;,
+  &quot;created&quot;: &quot;2025-12-30T14:15:00.000Z&quot;,
+  &quot;modified&quot;: &quot;2025-12-30T14:15:00.000Z&quot;,
+  &quot;name&quot;: &quot;Romance Investment Scam Syndicate&quot;,
+  &quot;description&quot;: &quot;A criminal network that grooms victims via dating platforms and then conducts large-scale investment and sextortion scams.&quot;,
+  &quot;threat_actor_types&quot;: [
+    &quot;fraudster&quot;,
+    &quot;crime-syndicate&quot;,
+    &quot;sextortionist&quot;
+  ],
+  &quot;aliases&quot;: [
+    &quot;GoldenHearts Capital Group&quot;,
+    &quot;PerfectMatch Advisors&quot;
+  ],
+  &quot;roles&quot;: [
+    &quot;messenger&quot;,
+    &quot;content-creator&quot;
+  ],
+  &quot;goals&quot;: [
+    &quot;Obtain victims’ trust for financial exploitation&quot;,
+    &quot;Extort additional payments using intimate material&quot;
+  ],
+  &quot;sophistication&quot;: &quot;advanced&quot;,
+  &quot;resource_level&quot;: &quot;organization&quot;,
+  &quot;primary_motivation&quot;: &quot;personal-financial-gain&quot;,
+  &quot;secondary_motivations&quot;: [
+    &quot;organizational-gain&quot;
+  ]
+}
+</code></pre>
+<h3 id="example-4-misinformation">Example 4: Misinformation</h3>
+<p>The following example shows someone spreading harmful content without recognizing they are supporting an operation.</p>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;threat-actor&quot;,
+  &quot;spec_version&quot;: &quot;2.1&quot;,
+  &quot;id&quot;: &quot;threat-actor--11111111-1111-4111-8111-111111111111&quot;,
+  &quot;created_by_ref&quot;: &quot;identity--aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee&quot;,
+  &quot;created&quot;: &quot;2025-12-30T14:00:00.000Z&quot;,
+  &quot;modified&quot;: &quot;2025-12-30T14:00:00.000Z&quot;,
+  &quot;name&quot;: &quot;Well-Meaning Misinformer&quot;,
+  &quot;description&quot;: &quot;An individual who repeatedly shares misleading health information without malicious intent.&quot;,
+  &quot;threat_actor_types&quot;: [
+    &quot;insider-accidental&quot;
+  ],
+  &quot;aliases&quot;: [
+    &quot;HelpfulNeighbor42&quot;
+  ],
+  &quot;roles&quot;: [
+    &quot;content-amplifier&quot;
+  ],
+  &quot;goals&quot;: [
+    &quot;Warn friends and family about perceived risks&quot;,
+    &quot;Promote home remedies and alternative treatments&quot;
+  ],
+  &quot;sophistication&quot;: &quot;minimal&quot;,
+  &quot;resource_level&quot;: &quot;individual&quot;,
+  &quot;primary_motivation&quot;: &quot;belonging&quot;,
+  &quot;secondary_motivations&quot;: [
+    &quot;personal-satisfaction&quot;
+  ]
+}
+</code></pre>
+<h2 id="intrusion-set">Intrusion Set</h2>
+<p>An Intrusion Set is a grouped set of campaigns, adversarial behaviors and resources with common properties that is believed to be orchestrated by a single organization. The name of this SDO assumes that the organization orchestrating the Intrusion Set is conducting a cyberattack i.e. an unauthorized <em>intrusion</em> into a proprietary information environment. When the organization instead is conducting an information operation involving manipulation, abuse or exploitation of information or communication, or of the consumers of information or communication in the public information environment, a new SDO with a more suitable name might be considered, such as “Information Manipulation Set”<sup id="fnref-8"><a href="#fn-8">8</a></sup>.</p>
+<p>However, naming one or more new SDOs according to presumed intent would introduce additional subjectivity and complexity. Instead, we propose repurposing the Intrusion Set SDO for the public information environment by adding a new optional property that specifies the context(s) within which the Intrusion Set is (are) observed to be operating:</p>
+<ul>
+<li>When the Intrusion Set is observed operating within a proprietary information environment, the context is “cyber”. This is the default value.</li>
+<li>When it is observed operating within the public information environment, the context is “social”, designating the environment in which society openly exchanges information and ideas and engages in debate.</li>
+<li>When it is observed operating within the physical environment, the context is “physical”, indicating the realm of the tangible, of tactile things and beings.</li>
+<li>Combinations are possible: an Intrusion Set found interfering with an Industrial Control System would be designated [“cyber”, “physical”]; an Intrusion Set found conducting a hack-and-leak operation would be designated [“cyber”, “social”]<sup id="fnref-9"><a href="#fn-9">9</a></sup>.</li>
+</ul>
+<p>When an Intrusion Set operates within a “social” context, the resources within it can include channels, narratives, media content, and personas, represented respectively by the Channel SDO, the Narrative SDO, the Media Content SCO, and the Persona SDO.</p>
+<h3 id="properties-1">Properties</h3>
+<p>The following additional properties are recommended.</p>
+<table>
+<thead>
+<tr>
+  <th>Property Name</th>
+  <th>Type</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>context</strong> (optional)</td>
+  <td><strong><code>list of type</code></strong> <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_v9k64f8djur1"><strong><code>enum</code></strong></a></td>
+  <td>The context within which the intrusion set is observed to be operating.  This property SHOULD be set if the object is observed operating outside a proprietary information environment. The values of this property MUST come from the <a href="#_heading=h.fw23ut33ivmj"><strong><code>context-enum</code></strong></a> enumeration. If no value is provided, then the context should be considered to default to “cyber”.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vocabularies-1">Vocabularies</h3>
+<ul>
+<li>We recommend the creation of a new enumeration <a href="#_heading=h.fw23ut33ivmj"><strong><code>context-enum</code></strong></a> with values “cyber” (default), “social”, and “physical”. See Context Enumeration for details.</li>
+<li>We recommend the following new entries to Attack Motivation Vocabulary <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_dmb1khqsn650"><strong><code>attack-motivation-ov</code></strong></a>: “Belonging”, “Control”, “Superiority”, “Adulation”, “Outrage”, “Revenge”, “Spite”, “Hatred”. See Attack Motivation Vocabulary for details.</li>
+</ul>
+<h3 id="relationships-1">Relationships</h3>
+<p>The following additional relationships are proposed.</p>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Type</th>
+  <th>Target</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>impersonates</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp"><strong><code>identity</code></strong></a></td>
+  <td>The intrusion set impersonates the specified individual, organization, or group.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>presents-as</code></em></td>
+  <td><strong><code>persona</code></strong></td>
+  <td>The intrusion set presents as the specified persona.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>targets</code></em></td>
+  <td><a href="https://oasis-open.github.io/cti-stix-common-objects/Incident_Extension_Suite.html#event"><strong><code>event</code></strong></a></td>
+  <td>The intrusion set targets the specified event.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>owns, uses</code></em></td>
+  <td><strong><code>channel</code></strong></td>
+  <td>The intrusion set owns or uses the specified channel.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>creates, spreads, uses, amplifies</code></em></td>
+  <td><strong><code>narrative</code></strong></td>
+  <td>The intrusion set creates, spreads, uses, or amplifies the specified narrative.</td>
+</tr>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td><em><code>creates, publishes, amplifies, engages-with</code></em></td>
+  <td><strong><code>media content</code></strong></td>
+  <td>The intrusion set creates, publishes, amplifies, or engages with the specified media content.</td>
+</tr>
+</tbody>
+</table>
+<p>The following additional reverse relationships are proposed.</p>
+<table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Type</th>
+  <th>Target</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_sczfhw64pjxt"><strong><code>incident</code></strong></a></td>
+  <td><em><code>attributed-to</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td>The specified incident is attributed to the intrusion set.</td>
+</tr>
+<tr>
+  <td><strong><code>media content</code></strong></td>
+  <td><em><code>created-by, published-by, amplified-by</code></em></td>
+  <td><a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_5ol9xlbbnrdn"><strong><code>intrusion set</code></strong></a></td>
+  <td>The specified media content is created by, published by, or amplified by the intrusion set.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-5-gender-based-violence">Example 5: Gender-Based Violence</h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;intrusion-set&quot;,
+  &quot;spec_version&quot;: &quot;2.1&quot;,
+  &quot;id&quot;: &quot;intrusion-set--77777777-8888-5333-9444-222222222222&quot;,
+  &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+  &quot;created&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+  &quot;modified&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+  &quot;name&quot;: &quot;Gender-Based-Violence-Abuse-Set-62&quot;,
+  &quot;description&quot;: &quot;Set of TTPs and resources targeting LGBTQ+ communities in the Balkans with hateful rhetoric and violent acts.&quot;,
+  &quot;first_seen&quot;: &quot;2025-08-01T00:00:00.000Z&quot;,
+  &quot;last_seen&quot;: &quot;2025-11-30T23:59:59.000Z&quot;,
+  &quot;goals&quot;: [
+    &quot;Spread fear within the LGBTQ community&quot;,
+    &quot;Establish male dominance in society&quot;,
+    &quot;Cause physical harm to targeted individuals&quot;
+  ],
+  &quot;resource_level&quot;: &quot;organization&quot;,
+  &quot;primary_motivation&quot;: &quot;dominance&quot;,
+  &quot;secondary_motivations&quot;: [
+    &quot;hatred&quot;
+  ],
+  &quot;context&quot;: [
+    &quot;social&quot;,
+    &quot;physical&quot;
+  ]
+}
+</code></pre>
+<h2 id="integrated-hypothetical-example">Integrated Hypothetical Example</h2>
+<p>The following hypothetical example illustrates the use of some of the new properties, relationships, and vocabularies. It models an operation which combines disinformation, hate speech, and impersonation fraud to target a local election and its supporters. The STIX bundle is followed by a knowledge graph built with the STIX Visualizer<sup id="fnref-10"><a href="#fn-10">10</a></sup>.</p>
+<h3 id="stix-bundle">STIX Bundle</h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;bundle&quot;,
+  &quot;id&quot;: &quot;bundle--00000000-0000-4000-8000-000000000000&quot;,
+  &quot;objects&quot;: [
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:30:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:30:00.000Z&quot;,
+      &quot;name&quot;: &quot;DAD-CDM Example CTI Producer&quot;,
+      &quot;description&quot;: &quot;Synthetic CTI producer identity used as created_by_ref for this bundle.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;technology&quot;,
+        &quot;non-profit&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;campaign&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+      &quot;name&quot;: &quot;Operation Divided Town&quot;,
+      &quot;description&quot;: &quot;Coordinated online operation combining disinformation, hate harassment, and fraud targeting a local election and its supporters.&quot;,
+      &quot;first_seen&quot;: &quot;2025-08-01T00:00:00.000Z&quot;,
+      &quot;last_seen&quot;: &quot;2025-11-30T23:59:59.000Z&quot;,
+      &quot;objective&quot;: &quot;Undermine trust in local election processes and exploit community divisions for financial gain.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;intrusion-set&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;intrusion-set--99999999-1111-4222-8333-999999999999&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:31:00.000Z&quot;,
+      &quot;name&quot;: &quot;The Great Divider&quot;,
+      &quot;description&quot;: &quot;Repeated use of disinformation, hate harassment, and fraud to create division in targeted communities.&quot;,
+      &quot;first_seen&quot;: &quot;2025-08-01T00:00:00.000Z&quot;,
+      &quot;last_seen&quot;: &quot;2025-11-30T23:59:59.000Z&quot;,
+      &quot;goals&quot;: [
+        &quot;Decrease trust in election results nationwide&quot;,
+        &quot;Intimidate activists and journalists&quot;,
+        &quot;Exploit vulnerable supporters for financial gain&quot;
+      ],
+      &quot;resource_level&quot;: &quot;organization&quot;,
+      &quot;primary_motivation&quot;: &quot;ideology&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;organizational-gain&quot;
+      ],
+      &quot;context&quot;: [
+        &quot;cyber&quot;,
+        &quot;social&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--bbbb1111-2222-4333-8444-bbbbbbbbbbbb&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:32:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:32:00.000Z&quot;,
+      &quot;name&quot;: &quot;Civic Health Alliance&quot;,
+      &quot;description&quot;: &quot;Non-profit organization targeted by Operation Divided Town.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;healthcare&quot;,
+        &quot;non-profit&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--cccc1111-2222-4333-8444-cccccccccccc&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:32:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:32:30.000Z&quot;,
+      &quot;name&quot;: &quot;Local Election Commission&quot;,
+      &quot;description&quot;: &quot;Local election authority targeted by narratives about fraud and illegitimacy.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;government-local&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--dddd1111-2222-4333-8444-dddddddddddd&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:33:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:33:00.000Z&quot;,
+      &quot;name&quot;: &quot;Town News&quot;,
+      &quot;description&quot;: &quot;Local independent news organization&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;roles&quot;: [
+        &quot;media-outlet&quot;
+      ],
+      &quot;sectors&quot;: [
+        &quot;communications&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--eeee1111-2222-4333-8444-eeeeeeeeeeee&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:33:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:33:30.000Z&quot;,
+      &quot;name&quot;: &quot;PatriotInvestor&quot;,
+      &quot;description&quot;: &quot;Patriotic investment coach encouraging investment in American enterprises&quot;,
+      &quot;identity_class&quot;: &quot;individual&quot;,
+      &quot;aliases&quot;: [
+        &quot;Heartland Wealth Adviser&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;expert&quot;
+      ],
+      &quot;sectors&quot;: [
+        &quot;financial-services&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--77771111-2222-4333-8444-777777777777&quot;,
+      &quot;created&quot;: &quot;2025-12-31T16:10:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-31T16:10:00.000Z&quot;,
+      &quot;name&quot;: &quot;Famous Handsome Actor&quot;,
+      &quot;description&quot;: &quot;Well-known male actor and eligible bachelor&quot;,
+      &quot;identity_class&quot;: &quot;individual&quot;,
+      &quot;sectors&quot;: [
+        &quot;entertainment&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--ffff1111-2222-4333-8444-ffffffffffff&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:34:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:34:00.000Z&quot;,
+      &quot;name&quot;: &quot;Town Bank&quot;,
+      &quot;description&quot;: &quot;Local bank whose brand is impersonated by the fraudster syndicate.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;roles&quot;: [
+        &quot;offline-service-provider&quot;
+      ],
+      &quot;sectors&quot;: [
+        &quot;financial-services&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;threat-actor&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;threat-actor--11111111-1111-4111-8111-111111111111&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:35:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:35:00.000Z&quot;,
+      &quot;name&quot;: &quot;Well-Meaning Misinformer&quot;,
+      &quot;description&quot;: &quot;Individual who repeatedly shares misleading election rumors without malicious intent.&quot;,
+      &quot;threat_actor_types&quot;: [
+        &quot;insider-accidental&quot;
+      ],
+      &quot;aliases&quot;: [
+        &quot;ConcernedCitizen89&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;content-amplifier&quot;
+      ],
+      &quot;goals&quot;: [
+        &quot;Warn neighbors about perceived election irregularities&quot;,
+        &quot;Promote alternative vote-counting narratives&quot;
+      ],
+      &quot;sophistication&quot;: &quot;minimal&quot;,
+      &quot;resource_level&quot;: &quot;individual&quot;,
+      &quot;primary_motivation&quot;: &quot;belonging&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;personal-satisfaction&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;threat-actor&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;threat-actor--22222222-1111-4111-8111-222222222222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:36:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:36:00.000Z&quot;,
+      &quot;name&quot;: &quot;State-Aligned Influence Cell&quot;,
+      &quot;description&quot;: &quot;Covert manipulation team that seeds divisive narratives through cut-out brands.&quot;,
+      &quot;threat_actor_types&quot;: [
+        &quot;covert-manipulator&quot;,
+        &quot;influence-for-hire-provider&quot;
+      ],
+      &quot;aliases&quot;: [
+        &quot;SilverLinden Consulting&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;content-creator&quot;,
+        &quot;content-publisher&quot;,
+        &quot;content-amplifier&quot;
+      ],
+      &quot;goals&quot;: [
+        &quot;Undermine trust in the Local Election Commission&quot;,
+        &quot;Increase societal distrust and polarization&quot;
+      ],
+      &quot;sophistication&quot;: &quot;advanced&quot;,
+      &quot;resource_level&quot;: &quot;organization&quot;,
+      &quot;primary_motivation&quot;: &quot;organizational-gain&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;ideology&quot;,
+        &quot;control&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;threat-actor&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;threat-actor--33333333-1111-4111-8111-333333333333&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:37:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:37:00.000Z&quot;,
+      &quot;name&quot;: &quot;Hate Harassment Crew&quot;,
+      &quot;description&quot;: &quot;Loose online collective targeting activists and election workers with racist and misogynistic abuse.&quot;,
+      &quot;threat_actor_types&quot;: [
+        &quot;cyber-mob&quot;
+      ],
+      &quot;aliases&quot;: [
+        &quot;RealVoicesOfTown&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;content-amplifier&quot;
+      ],
+      &quot;goals&quot;: [
+        &quot;Drive Civic Health Alliance staff offline through harassment&quot;,
+        &quot;Intimidate Local Election Commission employees&quot;
+      ],
+      &quot;sophistication&quot;: &quot;operational&quot;,
+      &quot;resource_level&quot;: &quot;team&quot;,
+      &quot;primary_motivation&quot;: &quot;personal-satisfaction&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;personal-gain&quot;,
+        &quot;hatred&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;threat-actor&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:38:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:38:00.000Z&quot;,
+      &quot;name&quot;: &quot;Patriot Investment Syndicate&quot;,
+      &quot;description&quot;: &quot;Criminal group that grooms victims via fake patriotic dating and investment schemes.&quot;,
+      &quot;threat_actor_types&quot;: [
+        &quot;fraudster&quot;,
+        &quot;crime-syndicate&quot;,
+        &quot;sextortionist&quot;
+      ],
+      &quot;aliases&quot;: [
+        &quot;Heartland Wealth Circle&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;messenger&quot;,
+        &quot;content-creator&quot;
+      ],
+      &quot;goals&quot;: [
+        &quot;Extract savings from local supporters via fraudulent investments&quot;,
+        &quot;Blackmail victims using intimate content collected during grooming&quot;
+      ],
+      &quot;sophistication&quot;: &quot;advanced&quot;,
+      &quot;resource_level&quot;: &quot;organization&quot;,
+      &quot;primary_motivation&quot;: &quot;personal-gain&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;organizational-gain&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--aaaa2222-3333-4444-8555-aaaaaaaa2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:39:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:39:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;participates-in&quot;,
+      &quot;description&quot;: &quot;The misinformer plays an unwitting supporting role in Operation Divided Town.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--11111111-1111-4111-8111-111111111111&quot;,
+      &quot;target_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--33333333-4444-5555-9666-zzzzzzzz3333&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:39:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:39:30.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;attributed-to&quot;,
+      &quot;description&quot;: &quot;The Operation Divided Town campaign is attributed to The Great Divider intrusion set.&quot;,
+      &quot;source_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;,
+      &quot;target_ref&quot;: &quot;intrusion-set--99999999-1111-4222-8333-999999999999&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--bbbb2222-3333-4444-8555-bbbbbbbb2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:39:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:39:30.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;attributed-to&quot;,
+      &quot;description&quot;: &quot;The state-aligned influence cell orchestrates The Great Divider intrusion set.&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--99999999-1111-4222-8333-999999999999&quot;,
+      &quot;target_ref&quot;: &quot;threat-actor--22222222-1111-4111-8111-222222222222&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--cccc2222-3333-4444-8555-cccccccc2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:40:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:40:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;participates-in&quot;,
+      &quot;description&quot;: &quot;The hate harassment crew participates in Operation Divided Town by targeting activists and officials.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--33333333-1111-4111-8111-333333333333&quot;,
+      &quot;target_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--dddd2222-3333-4444-8555-dddddddd2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:40:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:40:30.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;participates-in&quot;,
+      &quot;description&quot;: &quot;The fraud syndicate participates in Operation Divided Town by exploiting victims drawn in through campaign narratives.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+      &quot;target_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--eeee2222-3333-4444-8555-eeeeeeee2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:41:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:41:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;description&quot;: &quot;The intrusion set The Great Divider masquerades as the Town News organization.&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--99999999-1111-4222-8333-999999999999&quot;,
+      &quot;target_ref&quot;: &quot;identity--dddd1111-2222-4333-8444-dddddddddddd&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--ffff2222-3333-4444-8555-ffffffff2222&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:41:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:41:30.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;description&quot;: &quot;The fraud syndicate impersonates PatriotInvestor.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+      &quot;target_ref&quot;: &quot;identity--eeee1111-2222-4333-8444-eeeeeeeeeeee&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--88882222-3333-4444-8555-888888888888&quot;,
+      &quot;created&quot;: &quot;2025-12-31T16:12:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-31T16:12:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;description&quot;: &quot;The Patriot Investment Syndicate impersonates the Famous Handsome Actor.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+      &quot;target_ref&quot;: &quot;identity--77771111-2222-4333-8444-777777777777&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--11112222-3333-4444-8555-121212121212&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:42:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:42:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;description&quot;: &quot;Operation Divided Town targets the Civic Health Alliance.&quot;,
+      &quot;source_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;,
+      &quot;target_ref&quot;: &quot;identity--bbbb1111-2222-4333-8444-bbbbbbbbbbbb&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--99992222-3333-4444-8555-999999999999&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T15:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T15:00:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;description&quot;: &quot;The Patriot Investment Syndicate impersonates Town Bank in phishing and scam communications.&quot;,
+      &quot;source_ref&quot;: &quot;threat-actor--44444444-1111-4111-8111-444444444444&quot;,
+      &quot;target_ref&quot;: &quot;identity--ffff1111-2222-4333-8444-ffffffffffff&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--22222222-3333-4444-8555-232323232323&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--aaaa1111-2222-4333-8444-aaaaaaaaaaaa&quot;,
+      &quot;created&quot;: &quot;2025-12-30T14:42:30.000Z&quot;,
+      &quot;modified&quot;: &quot;2025-12-30T14:42:30.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;description&quot;: &quot;Operation Divided Town targets the Local Election Commission.&quot;,
+      &quot;source_ref&quot;: &quot;campaign--11111111-2222-3333-4444-555555555555&quot;,
+      &quot;target_ref&quot;: &quot;identity--cccc1111-2222-4333-8444-cccccccccccc&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="knowledge-graph">Knowledge Graph</h3>
+<p align="center"><img src="media/af5d52123ab75afa8ff4b314f4f6142d.png" style="max-width: 100%;"></p>
+
+<p align="center"><i>Figure 1 Example Operation Divided Town</i></p>
+
+<p align="center"><img src="media/c23c50a41b98a3375457d7d0dbe01a88.png" style="max-width: 100%;"></p>
+
+<h2 id="integrated-real-world-example">Integrated Real-World Example</h2>
+<p>The following real-world example illustrates the use of some of the new properties, relationships, and vocabularies. It models a cyber-enabled influence operation called Ghostwriter consisting of two intrusion sets: one responsible for credentials harvesting, the other which publishes inauthentic news articles on hacked websites and amplifies the articles using fabricated and hacked social media accounts<sup id="fnref-11"><a href="#fn-11">11</a></sup>. The STIX bundle is followed by a knowledge graph built with the STIX Visualizer<sup id="fnref-12"><a href="#fn-12">12</a></sup>.</p>
+<h3 id="stix-bundle-1">STIX Bundle</h3>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;bundle&quot;,
+  &quot;id&quot;: &quot;bundle--2ddbdc7b-fe4d-5546-9a23-3a658b13e3c2&quot;,
+  &quot;objects&quot;: [
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;name&quot;: &quot;DAD-CDM Example CTI Producer&quot;,
+      &quot;description&quot;: &quot;Synthetic CTI producer identity used as created_by_ref for this illustrative bundle. All objects below are SYNTHETIC examples built to demonstrate the proposed Intrusion Set `context` property and are not an authoritative attribution.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;technology&quot;,
+        &quot;non-profit&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;location&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;location--a113f58a-905e-57f2-b43e-e2428f277d39&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Belarus&quot;,
+      &quot;country&quot;: &quot;BY&quot;,
+      &quot;region&quot;: &quot;eastern-europe&quot;,
+      &quot;description&quot;: &quot;Assessed operating location of the cyber-espionage activity (Minsk).&quot;
+    },
+    {
+      &quot;type&quot;: &quot;location&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;location--c528c619-d9d4-5089-95f5-c7183655be68&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Lithuania&quot;,
+      &quot;country&quot;: &quot;LT&quot;,
+      &quot;region&quot;: &quot;eastern-europe&quot;
+    },
+    {
+      &quot;type&quot;: &quot;location&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;location--23444787-7aca-5e63-ad12-daf5bd6ea8d1&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Latvia&quot;,
+      &quot;country&quot;: &quot;LV&quot;,
+      &quot;region&quot;: &quot;eastern-europe&quot;
+    },
+    {
+      &quot;type&quot;: &quot;location&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;location--aa6107f1-2273-5656-9b74-fc993247ba02&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Poland&quot;,
+      &quot;country&quot;: &quot;PL&quot;,
+      &quot;region&quot;: &quot;eastern-europe&quot;
+    },
+    {
+      &quot;type&quot;: &quot;location&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;location--debb62f3-d176-560f-95a5-8e8eafea341d&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Ukraine&quot;,
+      &quot;country&quot;: &quot;UA&quot;,
+      &quot;region&quot;: &quot;eastern-europe&quot;
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--5c7c88c8-8650-5577-96e9-7f662ad86a9d&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;NATO&quot;,
+      &quot;description&quot;: &quot;Defensive alliance whose presence in Eastern Europe is targeted by hostile narratives.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;government-national&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--8f26b9e3-09fc-5436-89af-fd61ec34e1d2&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Eastern European Government Officials&quot;,
+      &quot;description&quot;: &quot;Group of officials whose email and social media accounts are targeted for compromise and subsequent abuse to disseminate fabricated content.&quot;,
+      &quot;identity_class&quot;: &quot;group&quot;,
+      &quot;sectors&quot;: [
+        &quot;government-national&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--17c90016-06ff-581f-8834-1919834e0978&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Regional News Portal (legitimate)&quot;,
+      &quot;description&quot;: &quot;Legitimate regional news outlet whose website and brand are impersonated/spoofed to lend false credibility to fabricated articles.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;roles&quot;: [
+        &quot;media-outlet&quot;
+      ],
+      &quot;sectors&quot;: [
+        &quot;communications&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;identity&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;identity--4e9616f5-dabf-5aa8-bc87-3f6820304f10&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Trusted Webmail / Social Brand (legitimate)&quot;,
+      &quot;description&quot;: &quot;Legitimate email/social platform brand spoofed in credential-theft (phishing) domains.&quot;,
+      &quot;identity_class&quot;: &quot;organization&quot;,
+      &quot;sectors&quot;: [
+        &quot;technology&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;threat-actor&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;threat-actor--4f48bf24-a600-515f-9826-483465245d28&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Belarus State-Linked Actor&quot;,
+      &quot;description&quot;: &quot;State-linked actor assessed in public reporting to direct or support the activity tracked as GhostWriter / UNC1151. Modeled here as the real-world actor to which the two intrusion sets are attributed. (SYNTHETIC illustrative object.)&quot;,
+      &quot;threat_actor_types&quot;: [
+        &quot;nation-state&quot;,
+        &quot;covert-manipulator&quot;
+      ],
+      &quot;aliases&quot;: [
+        &quot;Minsk-aligned operator&quot;
+      ],
+      &quot;roles&quot;: [
+        &quot;director&quot;
+      ],
+      &quot;goals&quot;: [
+        &quot;Undermine trust in NATO in Eastern Europe&quot;,
+        &quot;Suppress and discredit political opposition&quot;,
+        &quot;Destabilize domestic politics of neighboring states&quot;
+      ],
+      &quot;sophistication&quot;: &quot;advanced&quot;,
+      &quot;resource_level&quot;: &quot;government&quot;,
+      &quot;primary_motivation&quot;: &quot;ideology&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;control&quot;,
+        &quot;dominance&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;intrusion-set&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;UNC1151 (cyber-espionage component)&quot;,
+      &quot;description&quot;: &quot;The cyber-espionage fingerprint: credential-theft domains spoofing trusted email/social brands, spear-phishing, and compromise of email, social media, and website/CMS accounts. Operates within a proprietary information environment, hence context=[\&quot;cyber\&quot;] (also the default). Cooperates with the GhostWriter influence set, to which it supplies access and stolen material. SYNTHETIC example.&quot;,
+      &quot;aliases&quot;: [
+        &quot;UNC1151&quot;,
+        &quot;PUSHCHA&quot;
+      ],
+      &quot;first_seen&quot;: &quot;2017-01-01T00:00:00.000Z&quot;,
+      &quot;last_seen&quot;: &quot;2022-03-31T23:59:59.000Z&quot;,
+      &quot;goals&quot;: [
+        &quot;Harvest credentials of targeted officials and outlets&quot;,
+        &quot;Provide access and stolen material to the influence effort&quot;
+      ],
+      &quot;resource_level&quot;: &quot;government&quot;,
+      &quot;primary_motivation&quot;: &quot;ideology&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;organizational-gain&quot;
+      ],
+      &quot;context&quot;: [
+        &quot;cyber&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;intrusion-set&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;GhostWriter (influence component / IMS)&quot;,
+      &quot;description&quot;: &quot;The influence / Information Manipulation Set fingerprint: fabrication of news articles, spoofing of legitimate news websites, operation of inauthentic personas, and dissemination of anti-NATO and COVID-19 narratives. Operates within the public information environment, hence context=[\&quot;social\&quot;]. On its own this set would be regarded as an Information Manipulation Set. Cooperates with UNC1151, which supplies it with compromised access and leaked material. SYNTHETIC example.&quot;,
+      &quot;aliases&quot;: [
+        &quot;GhostWriter&quot;
+      ],
+      &quot;first_seen&quot;: &quot;2016-01-01T00:00:00.000Z&quot;,
+      &quot;last_seen&quot;: &quot;2022-03-31T23:59:59.000Z&quot;,
+      &quot;goals&quot;: [
+        &quot;Promote narratives critical of NATO's presence in Eastern Europe&quot;,
+        &quot;Discredit political opposition and sow domestic discord&quot;
+      ],
+      &quot;resource_level&quot;: &quot;government&quot;,
+      &quot;primary_motivation&quot;: &quot;ideology&quot;,
+      &quot;secondary_motivations&quot;: [
+        &quot;control&quot;
+      ],
+      &quot;context&quot;: [
+        &quot;social&quot;
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;campaign&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;campaign--9e3b644e-cff9-544d-9292-9bd4f09c148f&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Anti-NATO Narrative Wave (illustrative)&quot;,
+      &quot;description&quot;: &quot;Illustrative campaign of fabricated articles and leaked material promoting anti-NATO narratives across Lithuania, Latvia and Poland. SYNTHETIC example.&quot;,
+      &quot;aliases&quot;: [
+        &quot;NATO troops / COVID-19 narrative set&quot;
+      ],
+      &quot;first_seen&quot;: &quot;2020-06-01T00:00:00.000Z&quot;,
+      &quot;last_seen&quot;: &quot;2021-12-31T23:59:59.000Z&quot;,
+      &quot;objective&quot;: &quot;Undermine confidence in NATO's military presence in Eastern Europe.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--a4a4cb11-bf69-5e2d-bc46-7a88ab7b483d&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Phishing for Credentials&quot;,
+      &quot;description&quot;: &quot;Spear-phishing and spoofed login domains to harvest victim credentials.&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;mitre-attack&quot;,
+          &quot;external_id&quot;: &quot;T1566&quot;,
+          &quot;url&quot;: &quot;https://attack.mitre.org/techniques/T1566/&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--cb89dea0-5e00-57e7-b21a-b360c67b565f&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Compromise Accounts&quot;,
+      &quot;description&quot;: &quot;Compromise of email and social media accounts for access and dissemination.&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;mitre-attack&quot;,
+          &quot;external_id&quot;: &quot;T1586&quot;,
+          &quot;url&quot;: &quot;https://attack.mitre.org/techniques/T1586/&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--3162d188-c0f5-5f2a-8451-bbfb7851d178&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Develop Inauthentic News Articles&quot;,
+      &quot;description&quot;: &quot;Create false or misleading news articles aligned to campaign goals or narratives.&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;DISARM&quot;,
+          &quot;external_id&quot;: &quot;T0085.003&quot;,
+          &quot;url&quot;: &quot;https://github.com/DISARMFoundation/DISARMframeworks-17/blob/main/generated_pages/techniques/T0085.003.md&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--2130de41-8375-5e93-8b3d-7509b92702ab&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Impersonated Persona&quot;,
+      &quot;description&quot;: &quot;Threat actors may impersonate existing individuals or institutions to conceal their network identity, add legitimacy to content, or harm the impersonated target’s reputation. This Technique covers situations where an actor presents themselves as another existing individual or institution.&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;DISARM&quot;,
+          &quot;external_id&quot;: &quot;T0143.003&quot;,
+          &quot;url&quot;: &quot;https://github.com/DISARMFoundation/DISARMframeworks-17/blob/main/generated_pages/techniques/T0143.003.md&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--2d459671-1a0b-5095-ab81-61af7a738fe7&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;name&quot;: &quot;Fabricated Persona&quot;,
+      &quot;description&quot;: &quot;An individual or institution pretending to have a persona without any legitimate claim to that persona is presenting a fabricated persona, such as a person who presents themselves as a member of a country’s military without having worked in any capacity with the military (T0143.002: Fabricated Persona, T0097.105: Military Personnel).&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;DISARM&quot;,
+          &quot;external_id&quot;: &quot;T0143.002&quot;,
+          &quot;url&quot;: &quot;https://github.com/DISARMFoundation/DISARMframeworks-17/blob/main/generated_pages/techniques/T0143.002.md&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;attack-pattern&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;attack-pattern--5f81e69a-b33c-5213-8fc7-a819478b3608&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;name&quot;: &quot;Journalist Persona&quot;,
+      &quot;description&quot;: &quot;A fabricated persona presenting as a reporter or journalist delivering news, conducting interviews, or running investigations, used to give an influence operation the appearance of legitimacy. Here the inauthentic personas operated by the influence set are invented journalist personas (fabrication), not impersonation of a specific real journalist.&quot;,
+      &quot;external_references&quot;: [
+        {
+          &quot;source_name&quot;: &quot;DISARM&quot;,
+          &quot;external_id&quot;: &quot;T0097.102&quot;,
+          &quot;url&quot;: &quot;https://github.com/DISARMFoundation/DISARMframeworks-17/blob/main/generated_pages/techniques/T0097.102.md&quot;
+        }
+      ]
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--3463565c-efa3-5941-b07f-79361e30ae3d&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;related-to&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;description&quot;: &quot;The UNC1151 cyber-espionage set cooperates with the GhostWriter influence set, supplying it with compromised access and leaked material (cyber-enabled influence).&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--8342c575-22ad-532f-bbbd-60cb5dd28ee2&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;attributed-to&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;threat-actor--4f48bf24-a600-515f-9826-483465245d28&quot;,
+      &quot;description&quot;: &quot;The UNC1151 cyber-espionage set is attributed to the Belarus state-linked actor.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--b7ec0f61-c9e9-5148-9df6-1ca60ee65969&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;attributed-to&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;threat-actor--4f48bf24-a600-515f-9826-483465245d28&quot;,
+      &quot;description&quot;: &quot;The GhostWriter influence set is attributed to the Belarus state-linked actor.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--863ccef5-72ac-5f65-8b01-b30c4b9b6b35&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;attributed-to&quot;,
+      &quot;source_ref&quot;: &quot;campaign--9e3b644e-cff9-544d-9292-9bd4f09c148f&quot;,
+      &quot;target_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;description&quot;: &quot;The anti-NATO narrative campaign is attributed to the GhostWriter influence set.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--793f2fe7-c3ff-5df3-9363-06a9edca8eb5&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--a4a4cb11-bf69-5e2d-bc46-7a88ab7b483d&quot;,
+      &quot;description&quot;: &quot;UNC1151 uses credential phishing.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--6944e0d9-8a86-52cc-a38b-5537ccd8df9d&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--cb89dea0-5e00-57e7-b21a-b360c67b565f&quot;,
+      &quot;description&quot;: &quot;UNC1151 compromises email and social media accounts.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--b1db61cc-c74d-5138-b41a-96f8b5723aec&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--3162d188-c0f5-5f2a-8451-bbfb7851d178&quot;,
+      &quot;description&quot;: &quot;GhostWriter fabricates news content.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--bada8305-740e-56e4-ae7e-7bd39dbb807e&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--2130de41-8375-5e93-8b3d-7509b92702ab&quot;,
+      &quot;description&quot;: &quot;GhostWriter spoofs legitimate news sites.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--22ea90c0-7446-511b-a45c-43c06e028b6a&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--2d459671-1a0b-5095-ab81-61af7a738fe7&quot;,
+      &quot;description&quot;: &quot;GhostWriter operates fabricated personas.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--ef975304-942a-5cf0-8584-e3c5b53245ff&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;relationship_type&quot;: &quot;uses&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;attack-pattern--5f81e69a-b33c-5213-8fc7-a819478b3608&quot;,
+      &quot;description&quot;: &quot;The influence set fabricates and operates journalist personas to lend false legitimacy to its content.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--3c58e77f-e565-5697-abd3-b08c422fa8a2&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;originates-from&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;location--a113f58a-905e-57f2-b43e-e2428f277d39&quot;,
+      &quot;description&quot;: &quot;The cyber-espionage component is assessed to originate from Belarus (Minsk).&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--78200e9d-afd6-52a7-89ba-cfc8df177649&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;identity--5c7c88c8-8650-5577-96e9-7f662ad86a9d&quot;,
+      &quot;description&quot;: &quot;The influence set targets perceptions of NATO.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--948906ce-2545-53ef-8b82-962a2bc30365&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;location--c528c619-d9d4-5089-95f5-c7183655be68&quot;,
+      &quot;description&quot;: &quot;The influence set targets audiences in Lithuania.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--d8a4d273-ca20-5e38-b055-e885fe4d9fbe&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;location--23444787-7aca-5e63-ad12-daf5bd6ea8d1&quot;,
+      &quot;description&quot;: &quot;The influence set targets audiences in Latvia.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--4565ce02-50a2-5cdc-bc35-c53a2044e2b9&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;location--aa6107f1-2273-5656-9b74-fc993247ba02&quot;,
+      &quot;description&quot;: &quot;The influence set targets audiences in Poland.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--f4f11fed-e59e-51d0-9543-aab0ef76890a&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;location--debb62f3-d176-560f-95a5-8e8eafea341d&quot;,
+      &quot;description&quot;: &quot;The influence set targets audiences in Ukraine.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--35729891-7d22-5240-9dab-8be58f2f55af&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;targets&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;identity--8f26b9e3-09fc-5436-89af-fd61ec34e1d2&quot;,
+      &quot;description&quot;: &quot;The cyber set targets officials' accounts for compromise.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--c6ae9ee3-8ab3-54fe-a864-224878c1a30e&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--8f5eced7-e2a6-5958-a407-7413a05f600c&quot;,
+      &quot;target_ref&quot;: &quot;identity--17c90016-06ff-581f-8834-1919834e0978&quot;,
+      &quot;description&quot;: &quot;[proposed] The influence set impersonates a legitimate regional news outlet.&quot;
+    },
+    {
+      &quot;type&quot;: &quot;relationship&quot;,
+      &quot;spec_version&quot;: &quot;2.1&quot;,
+      &quot;id&quot;: &quot;relationship--fc900325-8365-5674-b489-dbd6f224a234&quot;,
+      &quot;created&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;modified&quot;: &quot;2026-06-15T12:00:00.000Z&quot;,
+      &quot;created_by_ref&quot;: &quot;identity--a362e97f-4e2c-525a-b16a-ebcd139e8368&quot;,
+      &quot;relationship_type&quot;: &quot;impersonates&quot;,
+      &quot;source_ref&quot;: &quot;intrusion-set--85c804b2-fa95-59c1-a9fc-201bacdaf040&quot;,
+      &quot;target_ref&quot;: &quot;identity--4e9616f5-dabf-5aa8-bc87-3f6820304f10&quot;,
+      &quot;description&quot;: &quot;[proposed] The cyber set impersonates a trusted email/social brand in credential-theft domains.&quot;
+    }
+  ]
+}
+</code></pre>
+<h3 id="knowledge-graph-1">Knowledge Graph</h3>
+<p align="center"><img src="media/46469b522ad99c16618b31cf075a28c3.png" style="max-width: 100%;"></p>
+
+<p align="center"><i>Figure 2 Example Ghostwriter</i></p>
+
+<p align="center"><img src="media/b7c27ea30825ee00ca025690a1f195b4.png" style="max-width: 100%;"></p>
+
+<h2 id="vocabularies-2">Vocabularies</h2>
+<h3 id="threat-actor-type-vocabulary">Threat Actor Type Vocabulary</h3>
+<p>The following additional threat actor types are proposed for threats to the public information environment. These are excerpted from the full analysis available in the supporting document <em>Expanding Intel’s Threat Agent Library to Accommodate FIMI and Other Online Harms.</em></p>
+<p><strong>Type Name:</strong> threat-actor-type-ov</p>
+<table>
+<thead>
+<tr>
+  <th>Vocabulary Value</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="2" style="text-align:center; background-color:#6D9EEB; color:#000000; font-weight:normal;">Manipulative</td></tr>
+<tr>
+  <td>overt-manipulator</td>
+  <td>An individual or organization who openly uses persuasive content or pressure to steer others’ beliefs or behavior in their preferred direction.</td>
+</tr>
+<tr>
+  <td>covert-manipulator</td>
+  <td>An individual or organization which secretly shapes others’ perceptions or decisions through deception, hidden agendas, or disguised sources.</td>
+</tr>
+<tr>
+  <td>influence-for-hire-provider</td>
+  <td>An individual or organization that sells manipulation services - such as coordinated messaging, astroturfing, or fake engagement - on behalf of paying clients.</td>
+</tr>
+<tr><td colspan="2" style="text-align:center; background-color:#6D9EEB; color:#000000; font-weight:normal;">Abusive</td></tr>
+<tr>
+  <td>hate-group</td>
+  <td>An organized collective that persistently targets people based on protected characteristics with hostile, dehumanizing, or exclusionary messages and actions.</td>
+</tr>
+<tr>
+  <td>cyber-mob</td>
+  <td>A loosely coordinated crowd of online actors who collectively participate in sustained harassment, pile-ons, or shaming against a person or group.</td>
+</tr>
+<tr>
+  <td>cyber-bully</td>
+  <td>Someone who repeatedly targets specific individuals online with hostile or degrading behavior intended to cause psychological or social harm.</td>
+</tr>
+<tr><td colspan="2" style="text-align:center; background-color:#6D9EEB; color:#000000; font-weight:normal;">Exploitative</td></tr>
+<tr>
+  <td>fraudster</td>
+  <td>Someone who systematically deceives others in digital environments to obtain money, assets, data, or advantages they are not entitled to.</td>
+</tr>
+<tr>
+  <td>cyber-stalker</td>
+  <td>Someone who persistently monitors, contacts, or intrudes on a target’s digital and often physical life in ways that undermine their privacy, safety, or autonomy.</td>
+</tr>
+<tr>
+  <td>extortionist</td>
+  <td>Someone who uses threats - such as exposure, damage, or disruption - to coerce victims into providing money, information, or other concessions.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="threat-actor-role-vocabulary">Threat Actor Role Vocabulary</h3>
+<p>The following additional threat actor roles are proposed for designating specific roles that threat actors can play in an information operation, influence or hate campaign.</p>
+<p><strong>Type Name:</strong> threat-actor-role-ov</p>
+<table>
+<thead>
+<tr>
+  <th>Vocabulary Value</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>public-communicator</td>
+  <td>The threat actor who is responsible for openly communicating a threat actor’s or campaign’s narratives. Includes diplomats, spokespersons, speakers, delegates, representatives.</td>
+</tr>
+<tr>
+  <td>private-messenger</td>
+  <td>The threat actor who handles private communication (texting, email, speech) with potential and actual supporters and targets.</td>
+</tr>
+<tr>
+  <td>content-creator</td>
+  <td>The threat actor who creates content to support a campaign narrative.</td>
+</tr>
+<tr>
+  <td>content-publisher</td>
+  <td>The threat actor who publishes content generated by the content creator, perhaps on the web or via a social media post.</td>
+</tr>
+<tr>
+  <td>content-amplifier</td>
+  <td>The threat actor who amplifies content posted by the content publisher, perhaps by sharing it, republishing it, reposting it, or engaging with it in some way.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="attack-motivation-vocabulary">Attack Motivation Vocabulary</h3>
+<p>The following additional attack motivations are proposed to describe the reasons and drivers behind threats to the public information environment. These are excerpted from the full analysis available in the supporting document <em>Expanding Intel’s Threat Agent Library to Accommodate FIMI and Other Online Harms.</em></p>
+<p><strong>Type Name:</strong> attack-motivation-ov</p>
+<table>
+<thead>
+<tr>
+  <th>Vocabulary Value</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>belonging</td>
+  <td>The emotional state of feeling accepted, valued, and respected by a larger group.</td>
+</tr>
+<tr>
+  <td>control</td>
+  <td>The power to influence or direct people's behavior or the course of events.</td>
+</tr>
+<tr>
+  <td>superiority</td>
+  <td>The state of being better, higher, greater, or more powerful than others in some way.</td>
+</tr>
+<tr>
+  <td>adulation</td>
+  <td>Extreme, excessive, or uncritical praise, admiration, or devotion.</td>
+</tr>
+<tr>
+  <td>outrage</td>
+  <td>An intense feeling of indignation triggered by a perceived injustice or moral violation.</td>
+</tr>
+<tr>
+  <td>revenge</td>
+  <td>A vindictive desire to inflict punishment or harm in retaliation for a perceived wrong.</td>
+</tr>
+<tr>
+  <td>spite</td>
+  <td>A petty feeling of envy or resentment expressed through harassment or ill will.</td>
+</tr>
+<tr>
+  <td>hatred</td>
+  <td>An extreme dislike, aversion, or ill will toward a person, group, or object.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="enumerations">Enumerations</h2>
+<h3 id="context-enumeration">Context Enumeration</h3>
+<p>The following taxonomy is proposed for designating the possible values for context. The context is the environment within which the object is observed.</p>
+<p><strong>Type Name:</strong> context-enum</p>
+<p>The context vocabulary is used in the following SDOs:</p>
+<ul>
+<li>Event</li>
+<li>Intrusion Set</li>
+</ul>
+<table>
+<thead>
+<tr>
+  <th>Vocabulary Value</th>
+  <th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>cyber</td>
+  <td>The object is observed within a proprietary information environment and may indicate a threat to cybersecurity e.g. ransomware, data-exfiltration, denial-of-service.   This is the default value if the property context is not set.</td>
+</tr>
+<tr>
+  <td>social</td>
+  <td>The object is observed within the public information environment and may indicate a threat to the public information environment e.g. disinformation, hate-speech, click-bait.</td>
+</tr>
+<tr>
+  <td>physical</td>
+  <td>The object is observed within the physical environment and may indicate a threat in the real world e.g. an intrusion set intruding into a proprietary physical space, or it may be a real-world object that provides the context for an information operation e.g. a real-world event such as a hurricane, an international-summit, a terrorist-attack.</td>
+</tr>
+</tbody>
+</table>
+<h2></h2>
+<hr />
+<h2>Notes</h2>
+<p><sup id="fn-1">1</sup> <a href="https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_32j232tfvtly">https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_32j232tfvtly</a> <a href="#fnref-1">↩</a></p>
+<p><sup id="fn-2">2</sup> <a href="https://www.disinfo.eu/building-a-common-operational-picture-of-fimi/">https://www.disinfo.eu/building-a-common-operational-picture-of-fimi/</a> <a href="#fnref-2">↩</a></p>
+<p><sup id="fn-3">3</sup> <a href="https://www.disinfo.eu/wp-content/uploads/2026/01/20260115_building-a-common-operational-picture-of-FIMI_01.pdf">https://www.disinfo.eu/wp-content/uploads/2026/01/20260115_building-a-common-operational-picture-of-FIMI_01.pdf</a> <a href="#fnref-3">↩</a></p>
+<p><sup id="fn-4">4</sup> <a href="https://oasis-open.github.io/cti-stix-common-objects/Incident_Extension_Suite.html">https://oasis-open.github.io/cti-stix-common-objects/Incident_Extension_Suite.html</a> <a href="#fnref-4">↩</a></p>
+<p><sup id="fn-5">5</sup> We are grateful to Jean-Philippe Salles for providing us with Filigran’s internal documentation on all the SROs within OpenCTI. <a href="#fnref-5">↩</a></p>
+<p><sup id="fn-6">6</sup> <a href="https://github.com/DAD-CDM/Contributions/pull/5">https://github.com/DAD-CDM/Contributions/pull/5</a> <a href="#fnref-6">↩</a></p>
+<p><sup id="fn-7">7</sup> <a href="https://static1.squarespace.com/static/5a111571d0e628a8679b6b6c/t/5c379b84b8a045a55b983f3a/1547148165167/Intel+-+Threat+Agent+Library+Helps+Identify+Information+Security+Risks.pdf">https://static1.squarespace.com/static/5a111571d0e628a8679b6b6c/t/5c379b84b8a045a55b983f3a/1547148165167/Intel+-+Threat+Agent+Library+Helps+Identify+Information+Security+Risks.pdf</a> <a href="#fnref-7">↩</a></p>
+<p><sup id="fn-8">8</sup> VIGINUM defines an Information Manipulation Set as “a collection of adversarial behaviors, tools, and Tactics, Techniques, and Procedures (TTPs) presumed to be linked to the same Threat Actor or group of Threat Actors, which may be unknown. One or more IMSs can be technically attributed to a threat actor, and one or more campaigns can be attributed to an IMS. An IMS should not be confused with a Threat Actor, which may consist of a State, organization or individual. Finally, an IMS can be used to conduct information campaigns, which can be broken down into several information operations (or incidents)”. VIGINUM defines strict criteria for an IMS based on clandestinity and coordination. See <a href="https://www.sgdsn.gouv.fr/files/files/Publications/20260122_NP_TLP-CLEAR_SGDSN_VIGINUM_IMS_0.pdf">https://www.sgdsn.gouv.fr/files/files/Publications/20260122_NP_TLP-CLEAR_SGDSN_VIGINUM_IMS_0.pdf</a>. <a href="#fnref-8">↩</a></p>
+<p><sup id="fn-9">9</sup> An alternative approach we considered was to define a new property “intent” for the Intrusion Set SDO, having an associated enumeration with values such as “intrusion”, “manipulation”, “abuse”, or “exploitation”, but establishing intent often remains elusive. Moreover, documenting the environment in which behaviors and resources are observed is more objective and will lead to more consistent coding by analysts. <a href="#fnref-9">↩</a></p>
+<p><sup id="fn-10">10</sup> <a href="https://oasis-open.github.io/cti-stix-visualization">https://oasis-open.github.io/cti-stix-visualization</a> <a href="#fnref-10">↩</a></p>
+<p><sup id="fn-11">11</sup> See, for example, <a href="https://www.hybridcoe.fi/wp-content/uploads/2022/11/20221129_Hybrid_CoE_Research_Report_7_Disarm_WEB.pdf">https://www.hybridcoe.fi/wp-content/uploads/2022/11/20221129_Hybrid_CoE_Research_Report_7_Disarm_WEB.pdf</a> <a href="#fnref-11">↩</a></p>
+<p><sup id="fn-12">12</sup> <a href="https://oasis-open.github.io/cti-stix-visualization">https://oasis-open.github.io/cti-stix-visualization</a> <a href="#fnref-12">↩</a></p>
+
+</div>
+</body>
+</html>

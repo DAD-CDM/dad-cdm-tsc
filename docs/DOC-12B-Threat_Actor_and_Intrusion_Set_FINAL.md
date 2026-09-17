@@ -47,7 +47,7 @@ Recent publications by FIMI defenders refer to one type of “intrusion set” i
 
 The DAD-CDM Technical Steering Committee would like to express its sincere gratitude to the EU External Action Service (EEAS), CheckFirst, Davide Gianni, Jeff Mates (US DoD Cyber Crime Center – DC3), Tim Casey (formerly Intel), and Adam M. (DISARM Foundation) for their guidance and feedback throughout the course of this research. Their expertise and insight greatly contributed to the development of this work to ensure that our findings align with the current practices of the STIX and FIMI communities.
 
-This document includes only the proposed *extensions* to STIX 2.1. To get the complete picture, readers are advised to read this document in conjunction with the STIX 2.1 specification<sup><a href="#fn-1">1</a></sup>. This document also assumes the existence of the Event, Task, and Impact SDOs which have been proposed by the Cyber Threat Intelligence Technical Committee of OASIS (the “CTI-TC”) for inclusion in STIX 2.<sup id="fnref-4"><a href="#fn-4">4</a></sup>.
+This document includes only the proposed *extensions* to STIX 2.1. To get the complete picture, readers are advised to read this document in conjunction with the STIX 2.1 specification<sup><a href="#fn-1">1</a></sup>. This document also assumes the existence of the Event, Task, and Impact SDOs which have been proposed by the Cyber Threat Intelligence Technical Committee of OASIS (the “CTI-TC”) for inclusion in STIX 2.2<sup id="fnref-4"><a href="#fn-4">4</a></sup>.
 
 New relationships being proposed include those already added by Filigran to OpenCTI<sup id="fnref-5"><a href="#fn-5">5</a></sup>. They assume not only the existence of the Event, Task, and Impact SDOs, but also the Channel, Narrative, and Persona SDOs and the Media Content SCO. These latter objects have been proposed by Filigran as DAD-CDM extensions<sup id="fnref-6"><a href="#fn-6">6</a></sup>. They will be the subject of separate DAD-CDM proposals.
 
@@ -72,7 +72,7 @@ The following additional relationships are recommended.
 
 | Source | Type | Target | Description |
 | --- | --- | --- | --- |
-| [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw) | *`sponsors`* | [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw), **`campaign`** | The threat actor sponsors the specified threat actor or campaign. |
+| [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw) | *`sponsors`* | [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw), [**`campaign`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_pcpvfz4ik6d6) | The threat actor sponsors the specified threat actor or campaign. |
 | [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw) | *`employs`* | [**`identity`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp) | The threat actor employs the specified individual. |
 | [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw) | *`compromises`* | [**`identity`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_wh296fiwpklp) | The threat actor compromises the specified individual, organization, or group. |
 | [**`threat actor`**](https://docs.oasis-open.org/cti/stix/v2.1/os/stix-v2.1-os.html#_k017w16zutw) | *`presents-as`* | **`persona`** | The threat actor presents as the specified persona. |
@@ -1346,15 +1346,15 @@ The following additional threat actor types are proposed for threats to the publ
 
 | Vocabulary Value | Description |
 | --- | --- |
-| Manipulative | |
+| **Manipulative** | |
 | overt-manipulator | An individual or organization who openly uses persuasive content or pressure to steer others’ beliefs or behavior in their preferred direction. |
 | covert-manipulator | An individual or organization which secretly shapes others’ perceptions or decisions through deception, hidden agendas, or disguised sources. |
 | influence-for-hire-provider | An individual or organization that sells manipulation services - such as coordinated messaging, astroturfing, or fake engagement - on behalf of paying clients. |
-| Abusive | |
+| **Abusive** | |
 | hate-group | An organized collective that persistently targets people based on protected characteristics with hostile, dehumanizing, or exclusionary messages and actions. |
 | cyber-mob | A loosely coordinated crowd of online actors who collectively participate in sustained harassment, pile-ons, or shaming against a person or group. |
 | cyber-bully | Someone who repeatedly targets specific individuals online with hostile or degrading behavior intended to cause psychological or social harm. |
-| Exploitative | |
+| **Exploitative** | |
 | fraudster | Someone who systematically deceives others in digital environments to obtain money, assets, data, or advantages they are not entitled to. |
 | cyber-stalker | Someone who persistently monitors, contacts, or intrudes on a target’s digital and often physical life in ways that undermine their privacy, safety, or autonomy. |
 | extortionist | Someone who uses threats - such as exposure, damage, or disruption - to coerce victims into providing money, information, or other concessions. |
